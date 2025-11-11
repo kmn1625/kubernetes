@@ -1,0 +1,8 @@
+# nginx-configmap.yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-settings
+data:
+  GREETING_MESSAGE: "Welcome to the K8s Tutor Cluster!"
+  SERVER_PORT: "80"
