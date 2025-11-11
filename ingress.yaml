@@ -1,0 +1,21 @@
+# nginx-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-path-ingress
+spec:
+  # The Ingress Controller will use these rules
+  rules:
+  - host: my.test.com
+    http:
+      paths:
+      # This path rule routes any traffic starting with /web
+      - path: /web
+        pathType: Prefix # Means 'starts with /web'
+        backend:
+          service:
+            # The Service we created earlier in Phase 3
+            name: nginx-internal-svc
+            port:
+              # The Service port (80)
+              number: 80
