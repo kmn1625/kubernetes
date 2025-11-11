@@ -1,0 +1,19 @@
+# deny-all-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-nginx-ingress
+  namespace: default
+spec:
+  # 🎯 The Pods this policy applies to (our Nginx Pods)
+  podSelector:
+    matchLabels:
+      app: web
+  
+  # 🚫 The list of policy types to enforce
+  policyTypes:
+  - Ingress 
+
+  # The 'ingress: []' block means: Allow no inbound traffic
+  # If this block is present but empty, it denies all traffic for this type.
+  ingress: []
