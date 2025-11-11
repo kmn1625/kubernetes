@@ -1,0 +1,14 @@
+# pod-reader-binding.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  namespace: default
+  name: read-pods-binding
+subjects:
+- kind: ServiceAccount
+  name: pod-reader-sa
+  namespace: default
+roleRef:
+  kind: Role
+  name: pod-reader-role
+  apiGroup: rbac.authorization.k8s.io
