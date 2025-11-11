@@ -1,0 +1,110 @@
+1. The Blue Deployment (V1 - Current Production)
+This Deployment runs the current stable version of Nginx (1.26.1) and is marked with the label version: blue.
+
+YAML
+
+# nginx-blue-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+      # 🎯 Selects Pods with the 'blue' version label
+      version: blue 
+  template:
+    metadata:
+      labels:
+        app: web
+        version: blue # ⬅️ THE BLUE POD LABEL
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.26.1 # ⬅️ THE OLD/STABLE IMAGE VERSION
+        ports:
+        - containerPort: 80
+🟢 2. The Green Deployment (V2 - New Release)
+This Deployment runs the new, untested version of Nginx (1.27.0) and is marked with the label version: green. The Service will ignore these Pods until the switch.
+
+YAML
+
+# nginx-green-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web
+      # 🎯 Selects Pods with the 'green' version label
+      version: green 
+  template:
+    metadata:
+      labels:
+        app: web
+        version: green # ⬅️ THE GREEN POD LABEL
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27.0 # ⬅️ THE NEW IMAGE VERSION
+        ports:
+        - containerPort: 80
+The Switch Recap
+To execute the switch from Blue to Green, you would update the Service Selector from:
+
+YAML
+
+  selector:
+    app: web
+    version: blue 
+to:
+
+YAML
+
+  selector:
+    app: web
+    version: green 
+The Service immediately connects to the running Green Pods, achieving the instant traffic cutover.
+
+The Blue Version Service (Live Traffic)
+This Service acts as the stable front door, and its selector is the only thing we will change later to switch to Green.
+
+YAML
+
+# prod-traffic-svc.yaml (Blue is LIVE)
+apiVersion: v1
+kind: Service
+metadata:
+  name: prod-traffic-svc
+  labels:
+    app: web
+spec:
+  # 🎯 Key Step: This selector only targets Pods 
+  # with the label 'version: blue'
+  selector:
+    app: web
+    version: blue # <--- Currently selecting Blue Pods
+  
+  # Using LoadBalancer to simulate a public entry point for production
+  type: LoadBalancer 
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80         # Port the Service exposes
+      targetPort: 80   # Port the Nginx container is listening on
+🔨 Action Item
+Deploy the Service:
+
+Bash
+
+kubectl apply -f prod-traffic-svc.yaml
+Verify Endpoints: Check that the Service successfully found the 3 Pods from your nginx-blue Deployment. The Endpoints should list the internal IPs of those blue Pods.
+
+Bash
+
+kubectl describe svc prod-traffic-svc
