@@ -1,0 +1,27 @@
+# nginx-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-stateless
+  labels:
+    app: web
+spec:
+  # The desired state: 3 copies of our Pod
+  replicas: 3
+  # Selector links the Deployment to the Pods it manages
+  selector:
+    matchLabels:
+      app: web
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: web
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        # We start with Nginx version 1.25.3
+        image: nginx:1.25.3
+        ports:
+        - containerPort: 80
