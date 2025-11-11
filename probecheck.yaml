@@ -1,0 +1,21 @@
+# Add this inside the Nginx container specification
+        ports:
+        - containerPort: 80
+        
+        # 1. LIVENESS PROBE: If this fails, K8s restarts the container
+        livenessProbe:
+          httpGet:
+            path: / # Check the root path
+            port: 80
+          initialDelaySeconds: 15 # Wait 15s before first check
+          periodSeconds: 20       # Check every 20 seconds
+          timeoutSeconds: 5
+        
+        # 2. READINESS PROBE: If this fails, K8s stops sending traffic to the Pod
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5  # Start checking early
+          periodSeconds: 5        # Check frequently (every 5 seconds)
+          failureThreshold: 1     # Fail after 1 unsuccessful attempt
