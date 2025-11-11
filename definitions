@@ -1,0 +1,23 @@
+
+That's a great choice. Ingress is the true "front door" for modern Kubernetes applications, allowing for centralized, intelligent routing and management of external traffic.
+
+🌐 Phase 4: Ingress and Layer 7 Routing
+Definition: Ingress
+Ingress is an API object that manages external access to the services in a cluster, typically HTTP and HTTPS. It gives you far more flexibility than a simple NodePort or LoadBalancer Service by enabling:
+
+Host-based routing: Directing traffic to different services based on the URL host (e.g., app1.mydomain.com vs. app2.mydomain.com).
+
+Path-based routing: Directing traffic to different services based on the URL path (e.g., mydomain.com/api vs. mydomain.com/web).
+
+TLS termination: Handling SSL certificates so your application Pods don't have to.
+
+ConfigMap: Non-Sensitive Configuration
+Definition
+A ConfigMap is an API object used to store non-sensitive configuration data in key-value pairs. 
+It is designed to hold information that is not confidential (like environment variables, flags, or non-secret configuration files).
+
+Secret: Sensitive Configuration
+Definition
+A Secret is an API object used to store and manage sensitive data, such as passwords, tokens, and keys. 
+By default, Secrets are stored in the cluster's etcd database and are Base64 encoded, which provides a minimal obfuscation layer, but they are not encrypted at rest by default.
+For true security, etcd encryption or a separate Secret management tool (like Vault) should be used.
