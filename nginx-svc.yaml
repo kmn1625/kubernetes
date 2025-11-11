@@ -1,0 +1,19 @@
+# nginx-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-internal-svc
+spec:
+  # This selector MUST match the labels on your Pods
+  selector:
+    app: web
+    tier: frontend
+  # We start with the default type: ClusterIP
+  type: ClusterIP 
+  ports:
+    - name: http
+      protocol: TCP
+      # The port the service itself exposes (internal to the cluster)
+      port: 80
+      # The port the Pod container is listening on (the containerPort in the Deployment)
+      targetPort: 80
