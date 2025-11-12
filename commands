@@ -1,4 +1,13 @@
+creating pod directly using image
 kubectl run nginx-pod --image=nginx --restart=Never
+
+changing image directly
+kubectl set image pod/redis redis=redis
+kubctl set image resouce_type/name container_name= image_name
+
+Use the kubectl scale command
+kubectl scale replicaset replicaset-1 --replicas=5
+
 Verify the Pod:
 kubectl get pods
 
