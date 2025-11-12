@@ -1,3 +1,6 @@
+edit yaml in cluster
+kubectl edit deployment frontend
+
 creating pod directly using image
 kubectl run nginx-pod --image=nginx --restart=Never
 
