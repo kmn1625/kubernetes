@@ -1,1 +1,12 @@
 kubectl run nginx-pod --image=nginx --restart=Never
+Verify the Pod:
+kubectl get pods
+
+🧾 Check Pod Details:
+kubectl describe pod nginx-pod
+
+🌐 Access it (optional, for testing):
+
+You can temporarily expose it:
+
+kubectl port-forward pod/nginx-pod 8080:80
